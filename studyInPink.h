@@ -75,7 +75,7 @@ bool CheckSquareEven(int x)
 }
 int firstMeet(int& EXP1, int& EXP2, const int& E1){
     //Complete this function to gain point on task 1
-    if (E1 < 0 && E1 > 999)
+    if (E1 < 0 || E1 > 999)
     {
         return -999;
     }
@@ -156,7 +156,7 @@ int investigateScene(int& EXP1, int& EXP2, int& HP2, int& M2, const int& E2){
     //Complete this function to gain point on task 2
     double d = E2 / 9.0 + 10;
     int temp = EXP2;
-    if (E2 < 0 && E2 >999)
+    if (E2 < 0 || E2 >999)
     {
         return -999;
     }
@@ -223,7 +223,7 @@ int investigateScene(int& EXP1, int& EXP2, int& HP2, int& M2, const int& E2){
 int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
     //Complete this function to gain point on task 3
     //Road 1
-    if (E3 < 0 && E3 >999)
+    if (E3 < 0 || E3 >999)
         return -999;
     
     int odd[9];
@@ -247,6 +247,7 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
 
     if (count == 0)
         M1 = ceil(M1 - 9 * 9 * E3 / 9.0);
+    
     if (HP1 < 0)
         HP1 = 0;
     if (EXP1 > 900)
@@ -271,7 +272,7 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
     {
         s += prime[i];
     }
-    m = ceil(s / 7);
+    m = ceil(s / 7.0);
 
     int count_2 = 0;
     for (int i = 0; i < 7; i++)
@@ -281,7 +282,7 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
         {
             int k = i + 1;
             HP1 = ceil(HP1 - prime[i] * k * 2);
-            EXP1 = EXP1 + (1000 - prime[i] * k) % 101;
+            EXP1 = ceil(EXP1 + (1000 - prime[i] * k) % 101);
             M1 = ceil(M1 - k * E3 / 9.0);
             count_2++;
         }
@@ -295,6 +296,8 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
         EXP1 = 900;
     if (M1 < 0)
         M1 = 0;
+    
+    
     //Road3
     int squareEven[20];
     for (int i = 0; i < 20; i++)
@@ -317,7 +320,7 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
     int count3 = 0;
     for (int i = 19; i >= 0; i--)
     {
-        squareEven[i] = ceil((squareEven[i] + E3) / (double)max);
+        squareEven[i] = ceil((squareEven[i] + E3) / max);
         squareEven[i] = squareEven[i] % 26 + 65;
         if (squareEven[i] == 80)
         {
@@ -339,11 +342,12 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
     if (M1 < 0)
         M1 = 0;
     //Road 4
+    
     int DayofMonth[12];
     for (int i = 0; i < 12; i++)
     {
         DayofMonth[i] = Day(i+1);
-        DayofMonth[i] = ceil(DayofMonth[i]+pow(E3/29.0,3));
+        DayofMonth[i] = ceil(DayofMonth[i]+pow(E3/29.0,3)); //lam tron
         DayofMonth[i] = DayofMonth[i] % 9;
     }
     
@@ -363,7 +367,7 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3){
     int count4 = 0;
     for (int i = 11; i >= 0; i--)
     {
-        DayofMonth[i] = ceil((DayofMonth[i] + E3) * (min / min_idx));
+        DayofMonth[i] = round((DayofMonth[i] + E3) * (min / min_idx));  //Test
         DayofMonth[i] = DayofMonth[i] % 26 + 65;
         if (DayofMonth[i] == 80)
         {
