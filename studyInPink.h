@@ -26,7 +26,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////
 
 
-/*int Day(int x)
+int Day(int x)
 {
     int a = 30;
     int b = 28;
@@ -72,7 +72,9 @@ bool CheckSquareEven(int x)
         return true;
     else
         return false;
-}*/
+}
+
+
 int firstMeet(int& EXP1, int& EXP2, const int& E1) {
     //Complete this function to gain point on task 1
     if (E1 < 0 || E1 > 999)
@@ -233,10 +235,10 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3) {
     if (E3 < 0 || E3 > 999)
         return -999;
 
-    int odd[] = { 1, 3, 5, 7, 9, 11, 13, 15, 17 };
-    for (int i = 0; i < 9; i++)
+    int odd[9];
+    for (int i = 0, j = 1; i < 9; i++, j+=2)
     {
-        odd[i] = (odd[i] + E3) % 26 + 65;
+        odd[i] = (j + E3) % 26 + 65;
     }
 
     int count = 0;
@@ -263,10 +265,14 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3) {
         M1 = 0;
 
     //Road 2
-    int prime[] = { 2,3,5,7,11,13,17 };
+    int prime[7];
+    int number = 0;
     for (int i = 0; i < 7; i++)
     {
-        prime[i] = (prime[i] + E3) % 26;
+        while (!checkPrime(number))
+            number++;
+        prime[i] = (number + E3) % 26;
+        number++;
     }
 
     int s = 0, m;
@@ -301,10 +307,14 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3) {
 
     //Check bug 
     //Road3, start
-    int squareEven[] = { 4,16,36,64,100,144,196,256,324,400,484,576,676,784,900,1024,1156,1296,1444,1600 };
+    int squareEven[20];
+    int number1 = 1;
     for (int i = 0; i < 20; i++)
     {
-        squareEven[i] = (squareEven[i] + E3 * E3) % 113;
+        while (!CheckSquareEven(number1))
+            number1++;
+        squareEven[i] = (number1 + E3 * E3) % 113;
+        number1++;
     }
 
     int max = squareEven[0];
@@ -345,10 +355,11 @@ int traceLuggage(int& HP1, int& EXP1, int& M1, const int& E3) {
         M1 = 0;
     //Road 4, Start
 
-    int DayofMonth[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+    int DayofMonth[12];
     int ratio1 = ceil(E3 / 29.0);
     for (int i = 0; i < 12; i++)
     {
+        DayofMonth[i] = Day(i + 1);
         DayofMonth[i] = (DayofMonth[i] + ratio1 * ratio1 * ratio1) % 9;
     }
 
