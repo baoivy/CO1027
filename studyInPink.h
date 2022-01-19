@@ -12,13 +12,10 @@
 #define studyInPink_h
 
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include <string>
 #include <fstream>
-#include <random>
-#include <time.h>
-#include <vector>
-#include <sstream>
 
 using namespace std;
 
