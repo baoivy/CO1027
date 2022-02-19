@@ -16,6 +16,7 @@
 #include <cmath>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -226,24 +227,18 @@ string notebook3(string ntb3) {
     int arr[10][10];
     ifstream ThirdNotebook;
     ThirdNotebook.open(ntb3);
+    //Write it in sstream
     for (int i = 0; i < 10; i++)
     {
-        string line;
-        ThirdNotebook >> line;
+        string line; getline(ThirdNotebook, line);
         line.push_back('|');
-        int k = 0; int index = 0;
+        stringstream ss(line);
         for (int j = 0; j < 10; j++)
         {
-            int bao = 0;
-            while (line[k] != '|')
-            {
-                k++; bao++;
-            }
-            string temp = line.substr(index, bao);
-            arr[i][j] = std::stoi(temp);
-            k++; index = k;
+            string number; getline(ss, number, '|');
+            arr[i][j] = std::stoi(number);
         }
-    } // Assume that we have read into array
+    }
     ThirdNotebook.close();
     
     for (int i = 0; i < 10; i++)
@@ -264,9 +259,7 @@ string notebook3(string ntb3) {
     }
 
     for (int i = 0; i < 10; i++)
-    {
         sortingThreeNum(arr[i][7], arr[i][8], arr[i][9]);
-    }
 
     string password;
     for (int i = 0; i < 10; i++)
@@ -379,22 +372,14 @@ bool chaseTaxi(
         }
     }   
     Point p[100];
-    points.push_back(' ');
-    int index = 0; int j = 0; int length = 0; int count = 0;
-    while (j < points.length())
+    int index = 0; stringstream ss(points);
+    int data1; int count = 0;
+    while (ss >> data1)
     {
-        int size = 0;
-        while (points[j] != ' ')
-        {
-            size++;
-            j++;
-        }
-        string number = points.substr(length, size);
-        j++; length = j;
         if (count % 2 == 0)
-            p[index].x = std::stoi(number);
+            p[index].x = data1;
         else
-            p[index].y = std::stoi(number);
+            p[index].y = data1;
         count++;
         if(count % 2 == 0 && count > 0)
             index++;
