@@ -19,7 +19,6 @@
 #include <sstream>
 
 using namespace std;
-
 ////////////////////////////////////////////////////////////////////////
 ///STUDENT'S ANSWER BEGINS HERE
 ///Complete the following functions
@@ -389,16 +388,16 @@ bool chaseTaxi(
     int sum = abs(p[0].x) + abs(p[0].y);
     for (int i = 0; i < index; i++)
     {
-        if (9*sum >= arr[p[i].x][p[i].y] && arr[p[i].x][p[i].y] != -9)
+        if (9*sum <= arr[p[i].x][p[i].y] && arr[p[i].x][p[i].y] != -9)
         {
             flag = true; 
             outCatchUps += 'Y';
             outCatchUps += ',';
-            outTimes += to_string(sum) + ',';
+            outTimes += to_string(9*sum) + ',';
             data = i + 1;
             break;
         }
-        else if (9*sum < arr[p[i].x][p[i].y] || arr[p[i].x][p[i].y] == -9) {
+        else if (9*sum > arr[p[i].x][p[i].y] || arr[p[i].x][p[i].y] == -9) {
             outCatchUps += 'N';
             outCatchUps += ',';
             outTimes += to_string(9*sum) + ',';
