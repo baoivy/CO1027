@@ -19,6 +19,7 @@
 #include <sstream>
 
 using namespace std;
+
 ////////////////////////////////////////////////////////////////////////
 ///STUDENT'S ANSWER BEGINS HERE
 ///Complete the following functions
@@ -291,9 +292,9 @@ string generateListPasswords(string pwd1, string pwd2, string pwd3) {
     finalPassword[8] = g(finalPassword[3], finalPassword[4]);
 
     string FindedPassword;
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 8; i++)
     {
-        FindedPassword += finalPassword[i] + ',';
+        FindedPassword += finalPassword[i] + ';';
     }
     FindedPassword += finalPassword[8];
     return FindedPassword;
@@ -325,28 +326,28 @@ bool chaseTaxi(
                 case 'L':
                 {
                     y--;
-                    tempNum += 14;
+                    tempNum += 9;
                     arr[x][y] = tempNum;
                     break;
                 }
                 case 'R' :
                 {
                     y++;
-                    tempNum += 14;
+                    tempNum += 9;
                     arr[x][y] = tempNum;
                     break;
                 }
                 case 'U' :
                 {
                     x--;
-                    tempNum += 14;
+                    tempNum += 9;
                     arr[x][y] = tempNum;
                     break;
                 }
                 case 'D' :
                 {
                     x++;
-                    tempNum += 14;
+                    tempNum += 9;
                     arr[x][y] = tempNum;
                     break;
                 }
@@ -388,19 +389,19 @@ bool chaseTaxi(
     int sum = abs(p[0].x) + abs(p[0].y);
     for (int i = 0; i < index; i++)
     {
-        if (9*sum <= arr[p[i].x][p[i].y] && arr[p[i].x][p[i].y] != -9)
+        if (14*sum <= arr[p[i].x][p[i].y] && arr[p[i].x][p[i].y] != -9)
         {
             flag = true; 
             outCatchUps += 'Y';
-            outCatchUps += ',';
-            outTimes += to_string(9*sum) + ',';
+            outCatchUps += ';';
+            outTimes += to_string(14*sum) + ';';
             data = i + 1;
             break;
         }
-        else if (9*sum > arr[p[i].x][p[i].y] || arr[p[i].x][p[i].y] == -9) {
+        else if (14*sum > arr[p[i].x][p[i].y] || arr[p[i].x][p[i].y] == -9) {
             outCatchUps += 'N';
-            outCatchUps += ',';
-            outTimes += to_string(9*sum) + ',';
+            outCatchUps += ';';
+            outTimes += to_string(14*sum) + ';';
             if (flag == false && i == index - 1)
                 break;
             sum += abs(p[i].x - p[i + 1].x) + abs(p[i].y - p[i + 1].y);
@@ -412,9 +413,9 @@ bool chaseTaxi(
         for(int i = data; i < index - 1; i++)
         {
             outCatchUps.push_back('-');
-            outCatchUps.push_back(',');
+            outCatchUps.push_back(';');
             outTimes.push_back('-');
-            outTimes.push_back(',');
+            outTimes.push_back(';');
         }
         outCatchUps.push_back('-');
         outTimes.push_back('-');
