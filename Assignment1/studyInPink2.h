@@ -243,7 +243,10 @@ string notebook3(string ntb3) {
         for (int j = 0; j < 10; j++)
         {
             string number; getline(ss, number, '|');
-            arr[i][j] = std::stoi(number);
+            if (std::stoi(number) > 0)
+                arr[i][j] = std::stoi(number);
+            else
+                arr[i][j] = -(std::stoi(number));
         }
     }
     ThirdNotebook.close();
