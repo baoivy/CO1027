@@ -34,34 +34,34 @@ bool OutofBound(char direction, int i, int j)
 {
     switch (direction)
     {
-        case 'L' :
-        {
-            j--;
-            if (j < 0)
-                return false;
-            break;
-        }
-        case 'R':
-        {
-            j++;
-            if (j >= 100)
-                return false;
-            break;
-        }
-        case 'U':
-        {
-            i--;
-            if (i < 0)
-                return false;
-            break;
-        }
-        case 'D' :
-        {
-            i++;
-            if (i >= 100)
-                return false;
-            break;
-        }
+    case 'L':
+    {
+        j--;
+        if (j < 0)
+            return false;
+        break;
+    }
+    case 'R':
+    {
+        j++;
+        if (j >= 100)
+            return false;
+        break;
+    }
+    case 'U':
+    {
+        i--;
+        if (i < 0)
+            return false;
+        break;
+    }
+    case 'D':
+    {
+        i++;
+        if (i >= 100)
+            return false;
+        break;
+    }
     }
     return true;
 }
@@ -117,13 +117,15 @@ bool FiboNumber(int x, int b = 1, int a = 0)
 {
     if (x == b && b >= x)
         return true;
-    else if(b > x)
+    else if (b > x)
         return false;
     return FiboNumber(x, a + b, b);
 }
 int FindPink(string s)
 {
     int count = 0;
+    if (s.length() < 4)
+        return count;
     for (int i = 0; i < s.length() - 3; i++)
     {
         if (s.substr(i, 4) == "Pink" || s.substr(i, 4) == "pink") {
@@ -145,20 +147,22 @@ string notebook1(string ntb1) {
     ifstream FirstNotebook;
     FirstNotebook.open(ntb1);
     string line1; FirstNotebook >> line1; //Can be a getline
+    FirstNotebook.ignore();
     for (int i = line1.length() - 1; i >= line1.length() - 3; i--)
     {
         if (line1[i] < '0' || line1[i] > '9')
-            return "000000000";
+            return "0000000000";
     }
     int n1 = std::stoi(line1.substr(line1.length() - 3, 3));
-    if (n1 == 000) return "000000000";
+    if (n1 == 000) return "0000000000";
 
-    int temp; int *freq = new int[n1];
-    int j = 0;
-    while(FirstNotebook >> temp)
+    int freq[1001];
+    string line2;
+    getline(FirstNotebook, line2);
+    stringstream ss(line2);
+    for (int i = 0; i < n1; i++)
     {
-        freq[j] = temp;
-        j++;
+        ss >> freq[i];
     }
     FirstNotebook.close();
 
@@ -175,12 +179,11 @@ string notebook1(string ntb1) {
         else
             pass1[i] = temp % 10;
     }
-    
-    //delete[] freq;
+
     string password;
     for (int i = 0; i < 10; i++)
     {
-        password += to_string(pass1[i]);
+        password.push_back(char(pass1[i]) + 48);
     }
     return password;
 }
@@ -199,18 +202,22 @@ string notebook2(string ntb2) {
                 return "1111111111";
         }
     }
+
+    if (std::stoi(size) < 5 || std::stoi(size) > 100)
+        return "1111111111";
+    
     SecondNotebook.ignore();
     string line; int cntP = 0;
-    while (!SecondNotebook.eof())
+    for (int i = 0; i < std::stoi(size); i++)
     {
         getline(SecondNotebook, line);
         cntP += FindPink(line);
     }
     SecondNotebook.close();
-    
+
     if (sizeofNumber(cntP) < 5)
         cntP = cntP * cntP;
-    
+
     string password = to_string(cntP);
     if (sizeofNumber(cntP) < 10)
     {
@@ -240,7 +247,7 @@ string notebook3(string ntb3) {
         }
     }
     ThirdNotebook.close();
-    
+
     for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 10; j++)
@@ -284,7 +291,7 @@ string generateListPasswords(string pwd1, string pwd2, string pwd3) {
     finalPassword[0] = pwd1;
     finalPassword[1] = pwd2;
     finalPassword[2] = pwd3;
-    finalPassword[3] = g(pwd1,pwd2);
+    finalPassword[3] = g(pwd1, pwd2);
     finalPassword[4] = g(pwd1, pwd3);
     finalPassword[5] = g(pwd2, pwd3);
     finalPassword[6] = g(finalPassword[3], pwd3);
@@ -304,8 +311,8 @@ bool chaseTaxi(
     int arr[100][100],
     string points,
     string moves,
-    string & outTimes,
-    string & outCatchUps
+    string& outTimes,
+    string& outCatchUps
 ) {
     // Complete this function to gain point
     for (int i = 0; i < 100; i++)
@@ -323,38 +330,38 @@ bool chaseTaxi(
         {
             switch (moves[i])
             {
-                case 'L':
-                {
-                    y--;
-                    tempNum += 9;
-                    arr[x][y] = tempNum;
-                    break;
-                }
-                case 'R' :
-                {
-                    y++;
-                    tempNum += 9;
-                    arr[x][y] = tempNum;
-                    break;
-                }
-                case 'U' :
-                {
-                    x--;
-                    tempNum += 9;
-                    arr[x][y] = tempNum;
-                    break;
-                }
-                case 'D' :
-                {
-                    x++;
-                    tempNum += 9;
-                    arr[x][y] = tempNum;
-                    break;
-                }
+            case 'L':
+            {
+                y--;
+                tempNum += 9;
+                arr[x][y] = tempNum;
+                break;
+            }
+            case 'R':
+            {
+                y++;
+                tempNum += 9;
+                arr[x][y] = tempNum;
+                break;
+            }
+            case 'U':
+            {
+                x--;
+                tempNum += 9;
+                arr[x][y] = tempNum;
+                break;
+            }
+            case 'D':
+            {
+                x++;
+                tempNum += 9;
+                arr[x][y] = tempNum;
+                break;
+            }
             }
         }
     }
-    
+
     for (int i = 0; i < points.length(); i++)
     {
         if (points[i] == '(' || points[i] == ')')
@@ -370,7 +377,7 @@ bool chaseTaxi(
         {
             points[i] = ' ';
         }
-    }   
+    }
     Point p[100];
     int index = 0; stringstream ss(points);
     int data1; int count = 0;
@@ -381,36 +388,36 @@ bool chaseTaxi(
         else
             p[index].y = data1;
         count++;
-        if(count % 2 == 0 && count > 0)
+        if (count % 2 == 0 && count > 0)
             index++;
     }
-  
+
     bool flag = false; int data = 0;
     int sum = abs(p[0].x) + abs(p[0].y);
     for (int i = 0; i < index; i++)
     {
-        if (14*sum <= arr[p[i].x][p[i].y] && arr[p[i].x][p[i].y] != -9)
+        if (14 * sum <= arr[p[i].x][p[i].y] && arr[p[i].x][p[i].y] != -9)
         {
-            flag = true; 
+            flag = true;
             outCatchUps += 'Y';
             outCatchUps += ';';
-            outTimes += to_string(14*sum) + ';';
+            outTimes += to_string(14 * sum) + ';';
             data = i + 1;
             break;
         }
-        else if (14*sum > arr[p[i].x][p[i].y] || arr[p[i].x][p[i].y] == -9) {
+        else if (14 * sum > arr[p[i].x][p[i].y] || arr[p[i].x][p[i].y] == -9) {
             outCatchUps += 'N';
             outCatchUps += ';';
-            outTimes += to_string(14*sum) + ';';
+            outTimes += to_string(14 * sum) + ';';
             if (flag == false && i == index - 1)
                 break;
             sum += abs(p[i].x - p[i + 1].x) + abs(p[i].y - p[i + 1].y);
         }
     }
 
-    if (flag == true)
+    if (flag == true && data != index)
     {
-        for(int i = data; i < index - 1; i++)
+        for (int i = data; i < index - 1; i++)
         {
             outCatchUps.push_back('-');
             outCatchUps.push_back(';');
@@ -420,7 +427,7 @@ bool chaseTaxi(
         outCatchUps.push_back('-');
         outTimes.push_back('-');
     }
-    else if (flag == false)
+    else if (flag == false || flag == true && data == index)
     {
         outTimes.erase(outTimes.length() - 1, 1);
         outCatchUps.erase(outCatchUps.length() - 1, 1);
