@@ -150,10 +150,10 @@ bool binary_searching(int arr[], int size, int target, int &x) {
         int mid = (left + right) / 2;
         if (arr[mid] == target)
             return true;
-        if (arr[mid] > target)
-            right--;
-        else if(arr[mid] < target)
-            left++;
+        if (arr[mid] < target)
+            right = mid - 1;
+        else if(arr[mid] > target)
+            left = mid + 1;
     }
     return false;
 }
@@ -201,6 +201,23 @@ void pushback(Event*& arr, int &size, int hp, int numEvent) {
     }
 }
 
+void changeLV(int &hp, int &lv, int &exp, string &HP) {
+    int bonusLV = exp / 100;
+    lv += bonusLV;
+    lv = lv > 10 ? 10 : lv;
+    if (lv == 10 && exp > 100)
+        exp = 100;
+    else
+        exp %= 100;
+
+    hp += 10 * bonusLV;
+    hp = hp > 999 ? 999 : hp;
+    int maxHP = std::stoi(HP);
+    maxHP += 50 * bonusLV;
+    maxHP = maxHP > 999 ? 999 : maxHP;
+    HP = to_string(maxHP);
+}
+
 int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & events) {
     ///Students have to complete this function and DO NOT modify any parameters in this function.
     events.pop_back();
@@ -215,6 +232,7 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
     int tmp_lvl;
     Event* pre_event = new Event[1]; int size = 0;
     bool event15 = false; int idx_hp_max = 0; int result = 0;
+    bool event12 = false; int tmp_ts;
     
     stringstream ss(events);
     string sequence_Event;
@@ -240,20 +258,7 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
             if (event1_5 == true) {
                 exp += bonusEXP;
                 if (exp >= 100) {
-                    int bonusLV = exp / 100;
-                    lv += bonusLV;
-                    lv = lv > 10 ? 10 : lv;
-                    if (lv == 10 && exp > 100)
-                        exp = 100;
-                    else 
-                        exp %= 100;
-                    
-                    hp += 10*bonusLV;
-                    hp = hp > 999 ? 999 : hp;
-                    int maxHP = std::stoi(HP);
-                    maxHP += 50*bonusLV;
-                    maxHP = maxHP > 999 ? 999 : maxHP;
-                    HP = to_string(maxHP);
+                    changeLV(hp, lv, exp, HP);
                 }
                 if (wong == true) {
                     num_wong_help--;
@@ -265,12 +270,13 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
 
             }
             else if (event1_5 == false) {
-                if (livitation == true) {
+                if (livitation == true && num_livitation != 0) {
                     hp -= bonusDamage * (100 - G(count_event, hp)) / 100;
                     num_livitation--;
                     if (num_livitation == 0) {
                         livitation = false;
                         lv = (lv < 3) ? 1 : lv;
+                        summon_livitation == true;
                     }
                 }
                 else 
@@ -321,20 +327,7 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
             if (win_rate > func_x) {
                 ts++; exp += 200;
                 if (exp >= 100) {
-                    int bonusLV = exp / 100;
-                    lv += bonusLV;
-                    lv = lv > 10 ? 10 : lv;
-                    if (lv == 10 && exp > 100)
-                        exp = 100;
-                    else
-                        exp %= 100;
-
-                    hp += 10 * bonusLV;
-                    hp = hp > 999 ? 999 : hp;
-                    int maxHP = std::stoi(HP);
-                    maxHP += 50 * bonusLV;
-                    maxHP = maxHP > 999 ? 999 : maxHP;
-                    HP = to_string(maxHP);
+                    changeLV(hp, lv, exp, HP);
                 }
             }
             else {
@@ -346,16 +339,19 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
                     hp = hp - hp * (100 - hp_rate) / 100;
             }
         }
-        else if (numEvent == 7 && summon_livitation == true) {
+        else if (numEvent == 7) {
+            livitation = true;
+            if (fake_wong == true) {
+                //Write later
+                fake_wong = false;
+                num_wong_fake_help = 3;
+            }
+            if (num_livitation > 0 && summon_livitation == false)
+                continue;
             if (cannot_summon_livitation == true)
                 continue;
             lv = (lv <= 8) ? (lv + 2) : lv;
-            livitation = true;
             summon_livitation = false;
-            if (fake_wong == true) {
-                fake_livitation = true;
-                livitation = false;
-            }
         }
         else if (numEvent == 8) {
             if (first_meet == true) {
@@ -375,6 +371,7 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
                 }
                 else {
                     livitation = false;
+                    fake_livitation = true;
                 }
             }
         }
@@ -382,8 +379,12 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
             hp = std::stoi(HP);
             poisonApple = false;
             fake_wong = false;
-            fake_livitation = false;
-            livitation = true; num_livitation = 3;
+            if (fake_livitation == true) {
+                livitation = true;
+                fake_livitation = false;
+            }
+            if(livitation == true)
+                num_livitation = 3;
         }
         else if (numEvent == 10) {
             int bonus = hp;
@@ -438,27 +439,35 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
             string str2 = first_str.substr(idx + 1);
             str1 = string(str1.rbegin(), str1.rend());
             str2 = string(str2.rbegin(), str2.rend());
-            string res; res += str1; res += str2;
+            string res; res += str1; res.push_back(first_str[idx]);  res += str2;
             int time_rotate = (str2.length()) % 10;
             while (time_rotate--) {
                 for (int i = 0; i < res.length(); i++) {
                     res[i]++;
-                    if (res[i] > 'Z' || res[i] > 'z') {
+                    if (res[i] == 'Z' + 1 || res[i] == 'z' + 1) {
                         res[i] -= 26;
                     }
                 }
             }
-            if (res.find(str2) != string::npos) {
+            if (res.find(second_str) != string::npos) {
                 exp += 30;
+                if (exp >= 100) {
+                    changeLV(hp, lv, exp, HP);
+                }
                 hp -= 0.1 * hp;
                 int maxHP = std::stoi(HP); maxHP -= 0.1 * maxHP;
                 HP = to_string(maxHP);
+                event12 = true;
             }
             else {
                 exp += 15;
+                if (exp >= 100) {
+                    changeLV(hp, lv, exp, HP);
+                }
                 livitation = false;
                 cannot_summon_livitation = true;
-                ts = 0;
+                tmp_ts = ts; ts = 0;
+                event12 = false;
             }
         }
         else if (numEvent == 13) {
@@ -483,10 +492,12 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
             }
             if (checkAscending(matrix, row_min, col_min, m)) {
                 hp += min * (row_min + col_min);
+                if (hp > std::stoi(HP))
+                    hp = std::stoi(HP);
             }
             else {
                 hp -= min * (row_min + col_min);
-                if (hp < 0 && true) {
+                if (hp < 0 && event12 == true) {
                     hp = 1;
                 }
                 else if (hp < 0)
@@ -504,9 +515,26 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
             if (binary_searching(arr, size, target1, x)) {
                 lv = 1;
                 hp = hp - x * (count_event % 10) * 7;
+                if (hp < 0) {
+                    if (ts == 0) {
+                        result = -1;
+                        break;
+                    }
+                    else {
+                        hp = std::stoi(HP);
+                        ts--;
+                    }
+                }
+                
             }
             else {
-
+                exp += 150;
+                livitation = true;
+                cannot_summon_livitation = false;
+                ts = tmp_ts;
+                if (exp >= 100) {
+                    changeLV(hp, lv, exp, HP);
+                }
             }
         }
         else if (numEvent == 15 && event15 == false) {
@@ -520,7 +548,7 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
             }
             if (ts > 0) {
                 ts--;
-                if (max = hp) {
+                if (max == hp) {
                     continue;
                 }
                 lv = 10;
@@ -531,6 +559,7 @@ int handleEvents(string & HP, string & LV, string & EXP, string & TS, string & e
         count_event++;
 
     }
+
     HP = to_string(hp); EXP = to_string(exp); LV = to_string(lv); TS = to_string(ts);
     delete[] pre_event;
     ///Result outcome
